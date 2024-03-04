@@ -1,7 +1,9 @@
 {
   "type": "commonjs",
   "scripts": {
-    "start": "nodemon index.js"
+    "start": "nodemon index.js",
+    "task1": "nodemon hm3/eventEmitter.js",
+    "task3": "nodemon hm3/converter.js"
   },
   "devDependencies": {
     "nodemon": "^3.1.0"
