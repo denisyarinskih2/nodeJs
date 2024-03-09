@@ -2,8 +2,8 @@
   "type": "commonjs",
   "scripts": {
     "start": "nodemon index.js",
-    "task1": "nodemon hm3/eventEmitter.js",
-    "task3": "nodemon hm3/converter.js",
+    "task1": "nodemon src/hm3/eventEmitter.js",
+    "task3": "nodemon src/hm3/converter.js",
     "test": "jest",
     "test:e2e": "jest src/hm4/e2e",
     "test:coverage": "jest --coverage"
