@@ -2,8 +2,8 @@
   "type": "commonjs",
   "scripts": {
     "build": "tsc",
-    "start:dev": "npx nodemon src/hm6/server.ts --inspect",
-    "start:pm2": "pm2 start dist/hm6/server.js --name ngmp-network-app",
+    "start:dev": "npx nodemon src/hm7/server.ts --inspect",
+    "start:pm2": "pm2 start dist/hm7/server.js --name ngmp-network-app",
     "start": "npm run build && npm run start:pm2",
     "stop": "pm2 stop ngmp-network-app"
   },
@@ -28,6 +28,7 @@
     "body-parser": "^1.20.2",
     "express": "^4.19.2",
     "joi": "^17.12.2",
+    "mongoose": "7.5.0",
     "uuid": "^9.0.1"
   }
 }

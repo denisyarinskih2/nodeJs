@@ -1,0 +1,15 @@
+version: "3.8"
+
+services:
+  app:
+    container_name: node-app
+    build: .
+    ports:
+      - "3000:3000"
+    depends_on:
+      - mongo
+  mongo:
+    container_name: mongo-db
+    image: mongo:latest
+    ports:
+      - "27017:27017"
