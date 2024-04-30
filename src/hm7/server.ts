@@ -19,8 +19,7 @@ const router: Router = express.Router();
 const PORT = 8000;
 
 // MongoDB connection URI
-const uri =
-  "mongodb+srv://Anastasiia:Irish12345678@cluster0.0lkuwrv.mongodb.net/Denis";
+const uri = process.env.MONGO_URL!
 
 mongoose
   .connect(uri)
