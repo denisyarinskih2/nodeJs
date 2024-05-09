@@ -7,7 +7,7 @@
     "start": "npm run build && npm run start:pm2",
     "stop": "pm2 stop ngmp-network-app",
     "typeorm": "typeorm-ts-node-commonjs",
-    "typeorm:migrate": "npm run typeorm migration:run -- -d ./src/hm8/server.ts"
+    "typeorm:migrate": "npm run typeorm migration:run -- -d ./src/hm8/data-source.config.ts"
   },
   "devDependencies": {
     "@babel/preset-env": "^7.24.0",

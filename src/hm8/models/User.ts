@@ -5,21 +5,33 @@ import {
   OneToMany,
   OneToOne,
   PrimaryGeneratedColumn,
+  ManyToOne,
+  JoinColumn
 } from "typeorm";
 import { Cart } from "./Cart";
 import { Order } from "./Order";
 
-@Entity()
+@Entity({ name: "user" })
 export class User extends BaseEntity {
   @PrimaryGeneratedColumn("uuid")
-  id!: string;
+  id: string;
 
   @Column()
-  email!: string;
+  name: string;
+
+  @Column()
+  email: string;
 
   @OneToOne(() => Cart, (cart) => cart.user, { cascade: true })
-  cart!: Cart;
+  cart: Cart;
 
-  @OneToMany(() => Order, (order) => order.userId, { cascade: true })
-  orders!: Order[];
+  @OneToMany(() => Order, (order) => order.userId)
+  orders: Order[];
+
+  @Column()
+  password: string;
+
+  @ManyToOne(() => Order, (order) => order.user)
+  @JoinColumn({name: 'role_id'})
+  role: string;
 }

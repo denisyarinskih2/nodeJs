@@ -4,8 +4,11 @@ import {
   Entity,
   OneToMany,
   PrimaryGeneratedColumn,
+  ManyToOne,
+  JoinColumn
 } from "typeorm";
-import { CartItem } from "./Cart";
+import { Cart, CartItem } from "./Cart";
+import { User } from "./User";
 
 export type ORDER_STATUS = "created" | "completed";
 
@@ -40,6 +43,10 @@ export class Delivery extends BaseEntity {
 export class Order extends BaseEntity {
   @PrimaryGeneratedColumn("uuid")
   id!: string;
+
+  @ManyToOne(() => User, user => user.orders, {cascade: true})
+  @JoinColumn({name: 'user_id'})
+  user!: User;
 
   @Column({ nullable: false })
   userId!: string;

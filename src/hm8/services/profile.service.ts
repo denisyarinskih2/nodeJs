@@ -2,17 +2,17 @@ import { getRepository } from "typeorm";
 import { Cart, CartItem, ORDER_STATUS, Order } from "../models";
 import { calculateTotal } from "./helpers";
 import { getProductDetails } from "./product.service";
-// import AppDataSource from "../server";
+import AppDataSource from "../data-source.config";
 
 export async function getOrCreateUserCart(userId: string): Promise<Cart> {
-  const cartRepository = getRepository(Cart);
-  const existingCart = await cartRepository.findOne({
+  // const cartRepository = getRepository(Cart);
+  const existingCart = await AppDataSource.manager.findOne(Cart, {
     where: { user: userId },
   });
 
   if (existingCart) {
-    const existingCartWithItems = await cartRepository
-      .createQueryBuilder("cart")
+    const existingCartWithItems = await AppDataSource.manager
+      .createQueryBuilder(Cart, "cart")
       .leftJoinAndSelect("cart.items", "items")
       .leftJoinAndSelect("items.product", "product")
       .where("cart.id = :cartId", { cartId: existingCart.id })
@@ -20,14 +20,14 @@ export async function getOrCreateUserCart(userId: string): Promise<Cart> {
     return existingCartWithItems!;
   }
 
-  const newCart = {
+  const newCart = AppDataSource.manager.create(Cart, {
     user: userId,
     isDeleted: false,
     items: [],
-  };
+  });
 
   try {
-    const result = await cartRepository.save(newCart);
+    const result = await AppDataSource.manager.save(newCart);
 
     return result;
   } catch (e) {
@@ -93,8 +93,8 @@ export async function createNewOrder(
 ): Promise<Order> {
   const total = calculateTotal(orderData.items || []);
 
-  const order = {
-    user: userId,
+  const order = AppDataSource.manager.create(Order, {
+    userId: userId,
     cartId: orderData.cartId || "",
     items: orderData.items || [],
     payment: orderData.payment || { type: "" },
@@ -102,10 +102,10 @@ export async function createNewOrder(
     comments: orderData.comments || "",
     status: "created" as ORDER_STATUS,
     total: total,
-  };
+  });
 
   try {
-    const result = Order.create(order);
+    const result = AppDataSource.manager.save(order);
 
     return result;
   } catch (e) {
