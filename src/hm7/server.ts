@@ -6,20 +6,26 @@ import {
   getProductById,
   getProducts,
   getProfileCart,
-  updateProfileCart,
+  signin,
+  signup,
+  updateProfileCart
 } from "./controllers";
 import {
   authValidation,
   productDetailsValidation,
   updateProfileCartValidation,
 } from "./middlewares";
+import dotenv from "dotenv";
+import { verifyToken } from "./middlewares/verify-token.middleware";
+import { isAdmin } from "./middlewares/is-admin.middleware";
 
 const app: Express = express();
 const router: Router = express.Router();
 const PORT = 8000;
+dotenv.config();
 
 // MongoDB connection URI
-const uri = process.env.MONGO_URL!
+const uri = process.env.MONGO_URL!;
 
 mongoose
   .connect(uri)
@@ -33,20 +39,30 @@ mongoose
 
 app.use(express.json());
 
-router.get("/profile/cart", authValidation, getProfileCart);
-router.post("/profile/cart/checkout", authValidation, createOrder);
-router.delete("/profile/cart", authValidation, deleteProfileCart);
+router.get("/profile/cart", [verifyToken, authValidation], getProfileCart);
+router.post(
+  "/profile/cart/checkout",
+  [verifyToken, authValidation],
+  createOrder
+);
+router.delete(
+  "/profile/cart",
+  [verifyToken, isAdmin, authValidation],
+  deleteProfileCart
+);
 router.put(
   "/profile/cart",
-  [authValidation, updateProfileCartValidation],
+  [verifyToken, authValidation, updateProfileCartValidation],
   updateProfileCart
 );
-router.get("/products", authValidation, getProducts);
+router.get("/products", [verifyToken, authValidation], getProducts);
 router.get(
   "/products/:productId",
-  [authValidation, productDetailsValidation],
+  [verifyToken, authValidation, productDetailsValidation],
   getProductById
 );
+router.post("/auth/register", signup);
+router.post("/auth/login", signin);
 
 app.use("/api", router);
 
