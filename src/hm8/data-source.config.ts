@@ -16,13 +16,15 @@ import {
   RoleMigration1636773719971,
 } from "./migrations";
 
+const {DB_HOST, DB_PORT, DB_NAME, DB_USER, DB_PASS} = process.env;
+
 const AppDataSource = new DataSource({
   type: "postgres",
-  host: "localhost",
-  port: 5432,
-  username: "node_gmp",
-  password: "password123",
-  database: "node_gmp",
+  host: DB_HOST,
+  port: parseInt(DB_PORT!),
+  username: DB_USER,
+  password: DB_PASS,
+  database: DB_NAME,
   entities: [Product, User, Cart, CartItem, Order, Payment, Delivery],
   migrations: [
     CartItemMigration1636773719976,
